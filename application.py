@@ -29,7 +29,7 @@ class GetTweetsWithLocations(tornado.web.RequestHandler):
         for row in cursor.fetchall():
             print(row)
             row_info = {}
-            row_info['id'] = row[0]
+            row_info['id'] = str(row[0])
             row_info['date'] = str(row[1])
             row_info['sentiment'] = float(row[2])
             row_info['country'] = row[4][1:-1]

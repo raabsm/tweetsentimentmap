@@ -142,11 +142,18 @@ function loadTweetMarkersAndCountries(){
 }
 
 function updateTweetBox(tweetInfo){
-    var twitterURL = "https://twitter.com/Interior/status/" + tweetInfo.id;
-    $.getJSON("https://publish.twitter.com/oembed?url=" + twitterURL, function(response){
-        var html = response['html'];
-        document.getElementById('tweet-box').innerHTML = html;
-    });
+    $('#tweet-box').show();
+    var tweet = document.getElementById("tweet");
+    var id = tweetInfo.id;
+    tweet.innerHTML = "";
+    twttr.widgets.createTweet(
+      id, tweet,
+      {
+        conversation : 'none',    // or all
+        cards        : 'hidden',  // or visible
+        linkColor    : '#cc0000', // default is blue
+        theme        : 'light'    // or dark
+      });
 }
 
 function dataToDataTable(sentimentsPerDate){
@@ -184,5 +191,8 @@ function styleFeature(feature) {
         zIndex: zIndex
     }
 
+}
+function deselectTweet(){
+    $('#tweet-box').hide();
 }
 
