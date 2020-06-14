@@ -48,9 +48,9 @@ function initMap() {
         center: new google.maps.LatLng(40.75,-74.00),
         zoom: 3
     });
-    loadTweetMarkersAndCountries();
-    // loadGeoJson('/datafiles/countries.geojson', 'ADMIN');
-    // map.data.setStyle(styleFeature);
+    //loadTweetMarkersAndCountries();
+    loadGeoJson('/datafiles/countries.geojson', 'ADMIN');
+    map.data.setStyle(styleFeature);
 
 }
 
@@ -90,13 +90,20 @@ function loadTweetMarkersAndCountries(){
             var latlng = new google.maps.LatLng(tweet['latitude'], tweet['longitude']);
 
             var scale = sentiment > 0 ? (sentiment * markerMultipleScale) : 3;
+            var markerColor = 'grey';
+            if(sentiment > 0){
+                markerColor = 'green';
+            }
+            else if(sentiment < 0){
+                markerColor = 'red';
+            }
             var icon = {
                 path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
                 scale: scale,
-                fillColor: sentiment >= 0 ? 'green': 'red',
+                fillColor: markerColor,
                 fillOpacity: 1,
                 strokeWeight: 0,
-                strokeColor:sentiment >= 0 ? 'green': 'red'
+                strokeColor:markerColor
             };
 
             var marker = new google.maps.Marker({
@@ -115,20 +122,20 @@ function loadTweetMarkersAndCountries(){
                 updateTweetBox(this.tweet_info);
             });
 
-            // let feature = map.data.getFeatureById(tweet['country']);
-            // if(feature) {
-            //     var count = feature.getProperty('count_tweets');
-            //     var sumSentiments = feature.getProperty('sum_sentiments')
-            //     if (count !== undefined) {
-            //         count++;
-            //         sumSentiments += sentiment;
-            //     } else {
-            //         count = 1;
-            //         sumSentiments = sentiment;
-            //     }
-            //     feature.setProperty('count_tweets', count);
-            //     feature.setProperty('sum_sentiments', sumSentiments);
-            // }
+            let feature = map.data.getFeatureById(tweet['country']);
+            if(feature) {
+                var count = feature.getProperty('count_tweets');
+                var sumSentiments = feature.getProperty('sum_sentiments')
+                if (count !== undefined) {
+                    count++;
+                    sumSentiments += sentiment;
+                } else {
+                    count = 1;
+                    sumSentiments = sentiment;
+                }
+                feature.setProperty('count_tweets', count);
+                feature.setProperty('sum_sentiments', sumSentiments);
+            }
         });
     });
 
@@ -158,7 +165,7 @@ function dataToDataTable(sentimentsPerDate){
 
 function styleFeature(feature) {
     var averageTweetScore = feature.getProperty('sum_sentiments') / feature.getProperty('count_tweets');
-    var fillOpacity = averageTweetScore;
+    console.log(feature.getProperty('ADMIN'), averageTweetScore);
     var fillColor = 'grey';
     if(averageTweetScore > 0){
         fillColor = 'green';
@@ -173,7 +180,7 @@ function styleFeature(feature) {
         strokeWeight: outlineWeight,
         strokeColor: '#fff',
         fillColor: fillColor,
-        fillOpacity: fillOpacity,
+        fillOpacity: 0.3,
         zIndex: zIndex
     }
 

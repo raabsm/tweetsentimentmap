@@ -27,6 +27,7 @@ class GetTweetsWithLocations(tornado.web.RequestHandler):
         resp = cursor.execute('SELECT * FROM tweets WHERE country IS NOT NULL')
         to_send = []
         for row in cursor.fetchall():
+            print(row)
             row_info = {}
             row_info['id'] = row[0]
             row_info['date'] = str(row[1])
