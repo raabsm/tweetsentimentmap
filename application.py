@@ -3,14 +3,16 @@ from config import DB_INFO
 from config import Google_Maps_API_KEY
 import tornado.ioloop
 import tornado.web
+import tornado.httpserver
 import json
+import os
 
 global cursor
 
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render('html/app.html', API_KEY=Google_Maps_API_KEY)
+        self.render('/app/tweetsentimentmap/html/app.html', API_KEY=Google_Maps_API_KEY)
 
 
 class GetTotals(tornado.web.RequestHandler):
@@ -27,7 +29,6 @@ class GetTweetsWithLocations(tornado.web.RequestHandler):
         resp = cursor.execute('SELECT * FROM tweets WHERE country IS NOT NULL')
         to_send = []
         for row in cursor.fetchall():
-            print(row)
             row_info = {}
             row_info['id'] = str(row[0])
             row_info['date'] = str(row[1])
@@ -60,15 +61,17 @@ def make_app():
         (r"/", MainHandler),
         (r"/get_total_twitter_data", GetTotals),
         (r"/get_tweets_with_locs", GetTweetsWithLocations),
-        (r"/datafiles/(.*)", tornado.web.StaticFileHandler, {"path": "/Users/samraab/Documents/TamidProject/datafiles/"}),
-        (r"/js/(.*)", tornado.web.StaticFileHandler, {"path": "/Users/samraab/Documents/TamidProject/js/"}),
-        (r"/css/(.*)", tornado.web.StaticFileHandler, {"path": "/Users/samraab/Documents/TamidProject/css/"})
+        (r"/datafiles/(.*)", tornado.web.StaticFileHandler, {"path": "/app/tweetsentimentmap/datafiles/"}),
+        (r"/js/(.*)", tornado.web.StaticFileHandler, {"path": "/app/tweetsentimentmap/js/"}),
+        (r"/css/(.*)", tornado.web.StaticFileHandler, {"path": "/app/tweetsentimentmap/css/"})
     ])
 
 
 if __name__ == "__main__":
     connect_db()
     app = make_app()
-    app.listen(9898)
+    http_server = tornado.httpserver.HTTPServer(app)
+    port = int(os.environ.get("PORT", 5000))
+    http_server.listen(port)
     print('running')
     tornado.ioloop.IOLoop.current().start()
