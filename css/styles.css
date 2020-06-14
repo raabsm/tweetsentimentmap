@@ -1,0 +1,18 @@
+
+#map {
+    height: 100%;
+}
+
+#columnChart{
+    bottom: 5px;
+    left: 5px;
+    z-index:2;
+    position: absolute;
+    background-color: #abdbfe69;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
