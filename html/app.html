@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 
     <head>
+
+<!--    First, The HTML page must load all of the libraries we use - Google Maps, JQUERY, Google visualizations, Twitter, and bootstrap-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-        <script src = "https://d3js.org/d3.v4.js"></script>
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script sync src="https://platform.twitter.com/widgets.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -17,12 +18,17 @@
         <div id="columnChart"></div>
         <div id="map"></div>
         <div id="tweet-box" class="text-box">
+
+<!--            Adds the "X" button on the top right-hand corner-->
+
             <button type="button" class="close" aria-label="Close" onclick="deselectTweet()">
                <span aria-hidden="true">&times;</span>
            </button>
             <div id="tweet"></div>
         </div>
         <script src="/js/app.js"></script>
+
+<!--        This Function will load the GMAPS API, and immediately call the initMap function in app.js-->
         <script async defer
          src="https://maps.googleapis.com/maps/api/js?key={{ API_KEY }}&callback=initMap">
         </script>
