@@ -31,7 +31,7 @@ class GetTweetsWithLocations(tornado.web.RequestHandler):
             row_info['id'] = row[0]
             row_info['date'] = str(row[1])
             row_info['sentiment'] = float(row[2])
-            row_info['country'] = row[4]
+            row_info['country'] = row[4][1:-1]
             row_info['longitude'] = float(row[5])
             row_info['latitude'] = float(row[6])
             to_send.append(row_info)

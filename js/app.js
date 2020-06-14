@@ -48,7 +48,10 @@ function initMap() {
         center: new google.maps.LatLng(40.75,-74.00),
         zoom: 3
     });
-    loadGeoJson('/datafiles/countries.geojson', 'Admin');
+    loadTweetMarkersAndCountries();
+    // loadGeoJson('/datafiles/countries.geojson', 'ADMIN');
+    // map.data.setStyle(styleFeature);
+
 }
 
 function loadGeoJson(filePath, idProperty) {
@@ -91,7 +94,7 @@ function loadTweetMarkersAndCountries(){
                 path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
                 scale: scale,
                 fillColor: sentiment >= 0 ? 'green': 'red',
-                fillOpacity: 0.5,
+                fillOpacity: 1,
                 strokeWeight: 0,
                 strokeColor:sentiment >= 0 ? 'green': 'red'
             };
@@ -111,8 +114,22 @@ function loadTweetMarkersAndCountries(){
                 selectedMarker = this;
                 updateTweetBox(this.tweet_info);
             });
-        });
 
+            // let feature = map.data.getFeatureById(tweet['country']);
+            // if(feature) {
+            //     var count = feature.getProperty('count_tweets');
+            //     var sumSentiments = feature.getProperty('sum_sentiments')
+            //     if (count !== undefined) {
+            //         count++;
+            //         sumSentiments += sentiment;
+            //     } else {
+            //         count = 1;
+            //         sumSentiments = sentiment;
+            //     }
+            //     feature.setProperty('count_tweets', count);
+            //     feature.setProperty('sum_sentiments', sumSentiments);
+            // }
+        });
     });
 
 }
@@ -137,5 +154,28 @@ function dataToDataTable(sentimentsPerDate){
 
     var returnData = google.visualization.arrayToDataTable(data);
     return returnData;
+}
+
+function styleFeature(feature) {
+    var averageTweetScore = feature.getProperty('sum_sentiments') / feature.getProperty('count_tweets');
+    var fillOpacity = averageTweetScore;
+    var fillColor = 'grey';
+    if(averageTweetScore > 0){
+        fillColor = 'green';
+    }
+    else if(averageTweetScore < 0){
+        fillColor = 'red'
+    }
+
+    var outlineWeight = 0.5, zIndex = 1;
+
+    return {
+        strokeWeight: outlineWeight,
+        strokeColor: '#fff',
+        fillColor: fillColor,
+        fillOpacity: fillOpacity,
+        zIndex: zIndex
+    }
+
 }
 
