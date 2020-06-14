@@ -172,7 +172,6 @@ function dataToDataTable(sentimentsPerDate){
 
 function styleFeature(feature) {
     var averageTweetScore = feature.getProperty('sum_sentiments') / feature.getProperty('count_tweets');
-    console.log(feature.getProperty('ADMIN'), averageTweetScore);
     var fillColor = 'grey';
     if(averageTweetScore > 0){
         fillColor = 'green';
